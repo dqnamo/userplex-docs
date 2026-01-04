@@ -1,0 +1,37 @@
+---
+title: Identities
+description: Manage user profiles and attributes.
+---
+
+Identities allow you to attach permanent traits to a `user_id`. When you send logs with that `user_id`, Userplex automatically associates the log with these traits.
+
+## Identifying Users
+
+Call `identify` when a user signs up or updates their profile. You only need to send the fields that have changed.
+
+```typescript
+await client.identify({
+  user_id: 'user_123', // Your internal ID
+  email: 'grace@hopper.com',
+  name: 'Grace Hopper',
+  attributes: {
+    plan: 'enterprise',
+    team_size: 15,
+    is_admin: true
+  }
+});
+```
+
+## Automatic Enrichment
+
+Once a user is identified, you can use their attributes in your dashboard filters.
+
+<Note>
+If you filter by `attributes.plan = 'enterprise'`, Userplex will find all logs triggered by users with that plan, even if the log payload itself didn't contain the plan name.
+</Note>
+
+## Best Practices
+
+*   **Stable IDs**: Use your database's primary key (e.g., UUID) as the `user_id`, not an email address or username which might change.
+*   **Identify Early**: Call `identify` as soon as your user logs in to ensure subsequent logs are correctly attributed.
+

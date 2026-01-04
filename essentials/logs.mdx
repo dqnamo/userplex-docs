@@ -1,0 +1,64 @@
+---
+title: Logs
+description: Track user actions and system behavior.
+---
+
+Logs are the immutable history of what happens in your application. A log consists of a name, a timestamp, and a JSON payload.
+
+## Log Structure
+
+A valid log object contains the following fields:
+
+| Field | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `name` | string | **Yes** | The name of the log (e.g., `signup.completed`). |
+| `user_id` | string | No | The ID of the user who performed the action. |
+| `data` | object | No | Arbitrary JSON object with log properties. |
+| `timestamp` | string | No | ISO 8601 timestamp. Defaults to `now`. |
+
+## Sending Logs
+
+Use the `log` method to record a log.
+
+```typescript
+await client.log({
+  name: 'invoice.paid',
+  user_id: 'cus_8374',
+  data: {
+    invoice_id: 'inv_993',
+    amount: 2000,
+    currency: 'usd'
+  }
+});
+```
+
+## Naming Conventions
+
+We recommend using a `noun.verb` syntax for your log names. This keeps your data organized and easy to search.
+
+<CardGroup cols={2}>
+  <Card title="Good" icon="check" color="#16A34A">
+    * `project.created`
+    * `user.signup`
+    * `payment.failed`
+  </Card>
+  <Card title="Bad" icon="xmark" color="#DC2626">
+    * `created project`
+    * `User Clicked Signup Button`
+    * `fail`
+  </Card>
+</CardGroup>
+
+## Batching
+
+For high-throughput applications, you can send up to 100 logs in a single batch request using `logBatch`.
+
+```typescript
+const logs = [
+  { name: 'page.view', user_id: 'u_1' },
+  { name: 'page.view', user_id: 'u_2' }
+];
+
+await client.logBatch(logs);
+```
+
