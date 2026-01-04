@@ -2,8 +2,8 @@
   "$schema": "https://mintlify.com/docs.json",
   "name": "Userplex",
   "logo": {
-    "light": "/logo/logo-white.svg",
-    "dark": "/logo/logo-black.svg"
+    "light": "/logo/logo-black.svg",
+    "dark": "/logo/logo-white.svg"
   },
   "theme": "maple",
   "favicon": "/favicon.svg",
