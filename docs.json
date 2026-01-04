@@ -35,7 +35,7 @@
       },
       {
         "group": "API Reference",
-        "openapi": "https://api.userplex.com/openapi"
+        "openapi": "https://api.userplex.app/openapi"
       }
     ]
   }
