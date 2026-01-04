@@ -7,20 +7,80 @@ Identities allow you to attach permanent traits to a `user_id`. When you send lo
 
 ## Identifying Users
 
-Call `identify` when a user signs up or updates their profile. You only need to send the fields that have changed.
+Call `users.identify` when a user signs up or updates their profile. You only need to send the fields that have changed.
 
-```typescript
-await client.identify({
-  user_id: 'user_123', // Your internal ID
-  email: 'grace@hopper.com',
-  name: 'Grace Hopper',
-  attributes: {
-    plan: 'enterprise',
-    team_size: 15,
-    is_admin: true
-  }
-});
-```
+<Tabs>
+  <Tab title="TypeScript">
+    ```typescript
+    import Userplex from 'userplex';
+
+    const client = new Userplex({
+      apiKey: process.env['USERPLEX_API_KEY'],
+    });
+
+    await client.users.identify({
+      user_id: 'user_123', // Your internal ID
+      email: 'grace@hopper.com',
+      name: 'Grace Hopper',
+      attributes: {
+        plan: 'enterprise',
+        team_size: 15,
+        is_admin: true
+      }
+    });
+    ```
+  </Tab>
+  <Tab title="Ruby">
+    ```ruby
+    require "userplex"
+
+    userplex = Userplex::Client.new(
+      api_key: ENV["USERPLEX_API_KEY"]
+    )
+
+    userplex.users.identify(
+      user_id: "user_123", # Your internal ID
+      email: "grace@hopper.com",
+      name: "Grace Hopper",
+      attributes: {
+        plan: "enterprise",
+        team_size: 15,
+        is_admin: true
+      }
+    )
+    ```
+  </Tab>
+  <Tab title="cURL">
+    ```bash
+    curl -X POST https://api.userplex.app/identify \
+      -H "Authorization: Bearer $USERPLEX_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "user_id": "user_123",
+        "email": "grace@hopper.com",
+        "name": "Grace Hopper",
+        "attributes": {
+          "plan": "enterprise",
+          "team_size": 15,
+          "is_admin": true
+        }
+      }'
+    ```
+  </Tab>
+</Tabs>
+
+## Identity Fields
+
+| Field | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `user_id` | string | **Yes** | Your internal user ID (database primary key). |
+| `email` | string | No* | The user's email address. |
+| `name` | string | No* | The user's display name. |
+| `attributes` | object | No | Custom attributes for filtering and segmentation. |
+
+<Note>
+  Either `email` or `name` must be provided when identifying a user.
+</Note>
 
 ## Automatic Enrichment
 
@@ -30,8 +90,58 @@ Once a user is identified, you can use their attributes in your dashboard filter
 If you filter by `attributes.plan = 'enterprise'`, Userplex will find all logs triggered by users with that plan, even if the log payload itself didn't contain the plan name.
 </Note>
 
+## Updating User Attributes
+
+You can call `identify` multiple times. Each call merges new attributes with existing ones.
+
+<Tabs>
+  <Tab title="TypeScript">
+    ```typescript
+    // Initial identification
+    await client.users.identify({
+      user_id: 'user_123',
+      email: 'grace@hopper.com',
+      attributes: { plan: 'free' }
+    });
+
+    // Later, when user upgrades
+    await client.users.identify({
+      user_id: 'user_123',
+      attributes: { plan: 'enterprise', upgraded_at: new Date().toISOString() }
+    });
+    ```
+  </Tab>
+  <Tab title="Ruby">
+    ```ruby
+    # Initial identification
+    userplex.users.identify(
+      user_id: "user_123",
+      email: "grace@hopper.com",
+      attributes: { plan: "free" }
+    )
+
+    # Later, when user upgrades
+    userplex.users.identify(
+      user_id: "user_123",
+      attributes: { plan: "enterprise", upgraded_at: Time.now.iso8601 }
+    )
+    ```
+  </Tab>
+</Tabs>
+
 ## Best Practices
 
-*   **Stable IDs**: Use your database's primary key (e.g., UUID) as the `user_id`, not an email address or username which might change.
-*   **Identify Early**: Call `identify` as soon as your user logs in to ensure subsequent logs are correctly attributed.
-
+<CardGroup cols={2}>
+  <Card title="Use Stable IDs" icon="key">
+    Use your database's primary key (e.g., UUID) as the `user_id`, not an email address or username which might change.
+  </Card>
+  <Card title="Identify Early" icon="clock">
+    Call `identify` as soon as your user logs in to ensure subsequent logs are correctly attributed.
+  </Card>
+  <Card title="Keep Attributes Clean" icon="broom">
+    Use consistent naming for attributes across your codebase. Prefer `snake_case` for attribute keys.
+  </Card>
+  <Card title="Don't Over-Identify" icon="warning">
+    You don't need to call `identify` on every request. Once is enough until attributes change.
+  </Card>
+</CardGroup>

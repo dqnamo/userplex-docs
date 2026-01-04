@@ -1,16 +1,18 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
-    },
-    "version": "1.0.0"
+    "title": "Userplex API",
+    "description": "The Userplex API allows you to send logs, identify users, and track user behavior in your applications.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Userplex Support",
+      "url": "https://userplex.app"
+    }
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
+      "url": "https://api.userplex.app",
+      "description": "Production API"
     }
   ],
   "security": [
@@ -19,76 +21,90 @@
     }
   ],
   "paths": {
-    "/plants": {
-      "get": {
-        "description": "Returns all plants from the system that the user has access to",
-        "parameters": [
+    "/log": {
+      "post": {
+        "operationId": "createLog",
+        "summary": "Create a log",
+        "description": "Record a single log event to track user actions or system behavior.",
+        "tags": ["Logs"],
+        "x-codeSamples": [
           {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import Userplex from 'userplex';\n\nconst client = new Userplex({\n  apiKey: process.env['USERPLEX_API_KEY'],\n});\n\nconst response = await client.logs.new({\n  name: 'invoice.paid',\n  user_id: 'user_123',\n  data: {\n    invoice_id: 'inv_993',\n    amount: 2000,\n    currency: 'usd'\n  }\n});\n\nconsole.log(response.success);"
+          },
+          {
+            "lang": "ruby",
+            "label": "Ruby SDK",
+            "source": "require \"userplex\"\n\nuserplex = Userplex::Client.new(\n  api_key: ENV[\"USERPLEX_API_KEY\"]\n)\n\nresponse = userplex.logs.new(\n  name: \"invoice.paid\",\n  user_id: \"user_123\",\n  data: {\n    invoice_id: \"inv_993\",\n    amount: 2000,\n    currency: \"usd\"\n  }\n)\n\nputs(response.success)"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl -X POST https://api.userplex.app/log \\\n  -H \"Authorization: Bearer $USERPLEX_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"name\": \"invoice.paid\",\n    \"user_id\": \"user_123\",\n    \"data\": {\n      \"invoice_id\": \"inv_993\",\n      \"amount\": 2000,\n      \"currency\": \"usd\"\n    }\n  }'"
           }
         ],
-        "responses": {
-          "200": {
-            "description": "Plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogRequest"
+              },
+              "examples": {
+                "basic": {
+                  "summary": "Basic log",
+                  "value": {
+                    "name": "page.view"
+                  }
+                },
+                "with_user": {
+                  "summary": "Log with user ID",
+                  "value": {
+                    "name": "button.clicked",
+                    "user_id": "user_123"
+                  }
+                },
+                "full": {
+                  "summary": "Full log with data",
+                  "value": {
+                    "name": "invoice.paid",
+                    "user_id": "user_123",
+                    "timestamp": "2025-01-04T12:00:00Z",
+                    "data": {
+                      "invoice_id": "inv_993",
+                      "amount": 2000,
+                      "currency": "usd"
+                    }
                   }
                 }
               }
             }
-          },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
           }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          },
-          "required": true
         },
         "responses": {
           "200": {
-            "description": "plant response",
+            "description": "Log created successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Plant"
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "example": {
+                  "success": true
                 }
               }
             }
           },
-          "400": {
-            "description": "unexpected error",
+          "401": {
+            "description": "Unauthorized - Invalid or missing API key",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "Missing or invalid API key"
                 }
               }
             }
@@ -96,57 +112,168 @@
         }
       }
     },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
-        "parameters": [
+    "/logs": {
+      "post": {
+        "operationId": "createLogsBatch",
+        "summary": "Create logs (batch)",
+        "description": "Record multiple log events in a single request. Use this for high-throughput applications to reduce API calls.",
+        "tags": ["Logs"],
+        "x-codeSamples": [
           {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import Userplex from 'userplex';\n\nconst client = new Userplex({\n  apiKey: process.env['USERPLEX_API_KEY'],\n});\n\nconst response = await client.logs.batch({\n  body: [\n    {\n      name: 'page.view',\n      user_id: 'user_1',\n      data: { path: '/dashboard' }\n    },\n    {\n      name: 'page.view',\n      user_id: 'user_2',\n      data: { path: '/settings' }\n    },\n    {\n      name: 'button.clicked',\n      user_id: 'user_1',\n      data: { button_id: 'submit' }\n    }\n  ]\n});\n\nconsole.log(response.success);"
+          },
+          {
+            "lang": "ruby",
+            "label": "Ruby SDK",
+            "source": "require \"userplex\"\n\nuserplex = Userplex::Client.new(\n  api_key: ENV[\"USERPLEX_API_KEY\"]\n)\n\nresponse = userplex.logs.batch(\n  body: [\n    {\n      name: \"page.view\",\n      user_id: \"user_1\",\n      data: { path: \"/dashboard\" }\n    },\n    {\n      name: \"page.view\",\n      user_id: \"user_2\",\n      data: { path: \"/settings\" }\n    },\n    {\n      name: \"button.clicked\",\n      user_id: \"user_1\",\n      data: { button_id: \"submit\" }\n    }\n  ]\n)\n\nputs(response.success)"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl -X POST https://api.userplex.app/logs \\\n  -H \"Authorization: Bearer $USERPLEX_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '[\n    {\n      \"name\": \"page.view\",\n      \"user_id\": \"user_1\",\n      \"data\": { \"path\": \"/dashboard\" }\n    },\n    {\n      \"name\": \"page.view\",\n      \"user_id\": \"user_2\",\n      \"data\": { \"path\": \"/settings\" }\n    }\n  ]'"
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "description": "A list of logs to ingest",
+                "items": {
+                  "$ref": "#/components/schemas/LogRequest"
+                },
+                "minItems": 1,
+                "maxItems": 100
+              },
+              "example": [
+                {
+                  "name": "page.view",
+                  "user_id": "user_1",
+                  "data": { "path": "/dashboard" }
+                },
+                {
+                  "name": "page.view",
+                  "user_id": "user_2",
+                  "data": { "path": "/settings" }
+                }
+              ]
+            }
+          }
+        },
         "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
+          "200": {
+            "description": "Logs created successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "example": {
+                  "success": true
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "Missing or invalid API key"
                 }
               }
             }
           }
         }
       }
-    }
-  },
-  "webhooks": {
-    "/plant/webhook": {
+    },
+    "/identify": {
       "post": {
-        "description": "Information about a new plant added to the store",
+        "operationId": "identifyUser",
+        "summary": "Identify a user",
+        "description": "Associate traits and attributes with a user ID. Once identified, all future logs with this user_id will be enriched with these attributes.",
+        "tags": ["Users"],
+        "x-codeSamples": [
+          {
+            "lang": "typescript",
+            "label": "TypeScript SDK",
+            "source": "import Userplex from 'userplex';\n\nconst client = new Userplex({\n  apiKey: process.env['USERPLEX_API_KEY'],\n});\n\nconst response = await client.users.identify({\n  user_id: 'user_123',\n  email: 'grace@hopper.com',\n  name: 'Grace Hopper',\n  attributes: {\n    plan: 'enterprise',\n    team_size: 15,\n    is_admin: true\n  }\n});\n\nconsole.log(response.success);"
+          },
+          {
+            "lang": "ruby",
+            "label": "Ruby SDK",
+            "source": "require \"userplex\"\n\nuserplex = Userplex::Client.new(\n  api_key: ENV[\"USERPLEX_API_KEY\"]\n)\n\nresponse = userplex.users.identify(\n  user_id: \"user_123\",\n  email: \"grace@hopper.com\",\n  name: \"Grace Hopper\",\n  attributes: {\n    plan: \"enterprise\",\n    team_size: 15,\n    is_admin: true\n  }\n)\n\nputs(response.success)"
+          },
+          {
+            "lang": "bash",
+            "label": "cURL",
+            "source": "curl -X POST https://api.userplex.app/identify \\\n  -H \"Authorization: Bearer $USERPLEX_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"user_id\": \"user_123\",\n    \"email\": \"grace@hopper.com\",\n    \"name\": \"Grace Hopper\",\n    \"attributes\": {\n      \"plan\": \"enterprise\",\n      \"team_size\": 15,\n      \"is_admin\": true\n    }\n  }'"
+          }
+        ],
         "requestBody": {
-          "description": "Plant added to the store",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewPlant"
+                "$ref": "#/components/schemas/IdentifyRequest"
+              },
+              "examples": {
+                "basic": {
+                  "summary": "Basic identification",
+                  "value": {
+                    "user_id": "user_123",
+                    "email": "user@example.com"
+                  }
+                },
+                "full": {
+                  "summary": "Full identification with attributes",
+                  "value": {
+                    "user_id": "user_123",
+                    "email": "grace@hopper.com",
+                    "name": "Grace Hopper",
+                    "attributes": {
+                      "plan": "enterprise",
+                      "team_size": 15,
+                      "is_admin": true
+                    }
+                  }
+                }
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Return a 200 status to indicate that the data was received successfully"
+            "description": "User identified successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "example": {
+                  "success": true
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "Missing or invalid API key"
+                }
+              }
+            }
           }
         }
       }
@@ -154,55 +281,89 @@
   },
   "components": {
     "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
+      "LogRequest": {
         "type": "object",
+        "required": ["name"],
         "properties": {
           "name": {
-            "description": "The name of the plant",
-            "type": "string"
+            "type": "string",
+            "description": "The name of the log event. We recommend using `noun.verb` syntax (e.g., `invoice.paid`, `user.signup`).",
+            "example": "invoice.paid"
           },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
+          "user_id": {
+            "type": "string",
+            "description": "The external user ID associated with this log. Use your database's primary key.",
+            "example": "user_123"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp for when the event occurred. Defaults to the current time if not provided.",
+            "example": "2025-01-04T12:00:00Z"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Additional data to include with the log. Can contain any JSON-serializable values.",
+            "example": {
+              "invoice_id": "inv_993",
+              "amount": 2000,
+              "currency": "usd"
+            }
           }
         }
       },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
+      "IdentifyRequest": {
+        "type": "object",
+        "required": ["user_id"],
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "Your internal user ID. Use a stable identifier like a database primary key.",
+            "example": "user_123"
           },
-          {
-            "required": [
-              "id"
-            ],
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "The user's email address.",
+            "example": "grace@hopper.com"
+          },
+          "name": {
+            "type": "string",
+            "description": "The user's display name.",
+            "example": "Grace Hopper"
+          },
+          "attributes": {
             "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
-              }
+            "additionalProperties": true,
+            "description": "Custom attributes to associate with the user. These can be used for filtering in the dashboard.",
+            "example": {
+              "plan": "enterprise",
+              "team_size": 15,
+              "is_admin": true
             }
           }
-        ]
+        }
       },
-      "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
+      "SuccessResponse": {
         "type": "object",
+        "required": ["success"],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Indicates whether the operation was successful.",
+            "example": true
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "required": ["error"],
         "properties": {
           "error": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string"
+            "type": "string",
+            "description": "A human-readable error message.",
+            "example": "Missing or invalid API key"
           }
         }
       }
@@ -210,8 +371,19 @@
     "securitySchemes": {
       "bearerAuth": {
         "type": "http",
-        "scheme": "bearer"
+        "scheme": "bearer",
+        "description": "Use your Userplex API key as a Bearer token. You can find your API key in the Userplex Dashboard under Settings > Developer."
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "Logs",
+      "description": "Track user actions and system events"
+    },
+    {
+      "name": "Users",
+      "description": "Manage user identities and attributes"
+    }
+  ]
 }

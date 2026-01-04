@@ -18,19 +18,64 @@ A valid log object contains the following fields:
 
 ## Sending Logs
 
-Use the `log` method to record a log.
+Use the `logs.new` method to record a log.
 
-```typescript
-await client.log({
-  name: 'invoice.paid',
-  user_id: 'cus_8374',
-  data: {
-    invoice_id: 'inv_993',
-    amount: 2000,
-    currency: 'usd'
-  }
-});
-```
+<Tabs>
+  <Tab title="TypeScript">
+    ```typescript
+    import Userplex from 'userplex';
+
+    const client = new Userplex({
+      apiKey: process.env['USERPLEX_API_KEY'],
+    });
+
+    await client.logs.new({
+      name: 'invoice.paid',
+      user_id: 'cus_8374',
+      data: {
+        invoice_id: 'inv_993',
+        amount: 2000,
+        currency: 'usd'
+      }
+    });
+    ```
+  </Tab>
+  <Tab title="Ruby">
+    ```ruby
+    require "userplex"
+
+    userplex = Userplex::Client.new(
+      api_key: ENV["USERPLEX_API_KEY"]
+    )
+
+    userplex.logs.new(
+      name: "invoice.paid",
+      user_id: "cus_8374",
+      data: {
+        invoice_id: "inv_993",
+        amount: 2000,
+        currency: "usd"
+      }
+    )
+    ```
+  </Tab>
+  <Tab title="cURL">
+    ```bash
+    curl -X POST https://api.userplex.app/log \
+      -H "Authorization: Bearer $USERPLEX_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "name": "invoice.paid",
+        "user_id": "cus_8374",
+        "data": {
+          "invoice_id": "inv_993",
+          "amount": 2000,
+          "currency": "usd"
+        }
+      }'
+    ```
+  </Tab>
+</Tabs>
 
 ## Naming Conventions
 
@@ -51,14 +96,48 @@ We recommend using a `noun.verb` syntax for your log names. This keeps your data
 
 ## Batching
 
-For high-throughput applications, you can send up to 100 logs in a single batch request using `logBatch`.
+For high-throughput applications, you can send up to 100 logs in a single batch request using `logs.batch`.
 
-```typescript
-const logs = [
-  { name: 'page.view', user_id: 'u_1' },
-  { name: 'page.view', user_id: 'u_2' }
-];
+<Tabs>
+  <Tab title="TypeScript">
+    ```typescript
+    const response = await client.logs.batch({
+      body: [
+        { name: 'page.view', user_id: 'u_1', data: { path: '/home' } },
+        { name: 'page.view', user_id: 'u_2', data: { path: '/pricing' } },
+        { name: 'button.clicked', user_id: 'u_1', data: { button: 'signup' } }
+      ]
+    });
 
-await client.logBatch(logs);
-```
+    console.log(response.success); // true
+    ```
+  </Tab>
+  <Tab title="Ruby">
+    ```ruby
+    response = userplex.logs.batch(
+      body: [
+        { name: "page.view", user_id: "u_1", data: { path: "/home" } },
+        { name: "page.view", user_id: "u_2", data: { path: "/pricing" } },
+        { name: "button.clicked", user_id: "u_1", data: { button: "signup" } }
+      ]
+    )
 
+    puts(response.success) # true
+    ```
+  </Tab>
+  <Tab title="cURL">
+    ```bash
+    curl -X POST https://api.userplex.app/logs \
+      -H "Authorization: Bearer $USERPLEX_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '[
+        { "name": "page.view", "user_id": "u_1" },
+        { "name": "page.view", "user_id": "u_2" }
+      ]'
+    ```
+  </Tab>
+</Tabs>
+
+<Tip>
+  Use batching when you have multiple logs to send at once. It reduces API calls and is more efficient for high-volume applications.
+</Tip>

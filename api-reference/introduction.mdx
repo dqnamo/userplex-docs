@@ -1,33 +1,133 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: 'API Reference'
+description: 'Complete reference for the Userplex REST API'
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+The Userplex API allows you to send logs, identify users, and track behavior in your applications. All API requests require authentication using a Bearer token.
 
-## Welcome
+## Base URL
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+All API requests should be made to:
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+```
+https://api.userplex.app
+```
 
 ## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+Authenticate your requests by including your API key as a Bearer token in the `Authorization` header.
+
+```bash
+Authorization: Bearer sk_live_your_api_key
+```
+
+You can find your API key in the [Userplex Dashboard](https://app.userplex.app) under **Settings > Developer**.
+
+<Warning>
+  Keep your API key secure. Never expose it in client-side code or commit it to version control.
+</Warning>
+
+## SDKs
+
+We provide official SDKs for TypeScript and Ruby that handle authentication and provide a better developer experience.
+
+<CardGroup cols={2}>
+  <Card title="TypeScript SDK" icon="js" href="https://www.npmjs.com/package/userplex">
+    ```bash
+    npm install userplex
+    ```
+  </Card>
+  <Card title="Ruby SDK" icon="gem" href="https://rubygems.org/gems/userplex">
+    ```bash
+    gem install userplex
+    ```
+  </Card>
+</CardGroup>
+
+## Quick Examples
+
+<Tabs>
+  <Tab title="TypeScript">
+    ```typescript
+    import Userplex from 'userplex';
+
+    const client = new Userplex({
+      apiKey: process.env['USERPLEX_API_KEY'],
+    });
+
+    // Send a log
+    await client.logs.new({
+      name: 'user.signup',
+      user_id: 'user_123',
+      data: { plan: 'pro' }
+    });
+
+    // Identify a user
+    await client.users.identify({
+      user_id: 'user_123',
+      email: 'user@example.com',
+      name: 'Jane Doe'
+    });
+    ```
+  </Tab>
+  <Tab title="Ruby">
+    ```ruby
+    require "userplex"
+
+    userplex = Userplex::Client.new(
+      api_key: ENV["USERPLEX_API_KEY"]
+    )
+
+    # Send a log
+    userplex.logs.new(
+      name: "user.signup",
+      user_id: "user_123",
+      data: { plan: "pro" }
+    )
+
+    # Identify a user
+    userplex.users.identify(
+      user_id: "user_123",
+      email: "user@example.com",
+      name: "Jane Doe"
+    )
+    ```
+  </Tab>
+  <Tab title="cURL">
+    ```bash
+    # Send a log
+    curl -X POST https://api.userplex.app/log \
+      -H "Authorization: Bearer $USERPLEX_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{"name": "user.signup", "user_id": "user_123"}'
+
+    # Identify a user
+    curl -X POST https://api.userplex.app/identify \
+      -H "Authorization: Bearer $USERPLEX_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{"user_id": "user_123", "email": "user@example.com"}'
+    ```
+  </Tab>
+</Tabs>
+
+## Response Format
+
+All successful responses return a JSON object with a `success` field:
 
 ```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
+{
+  "success": true
+}
 ```
+
+Error responses include an `error` field with a human-readable message:
+
+```json
+{
+  "error": "Missing or invalid API key"
+}
+```
+
+## Rate Limits
+
+The API allows up to 1,000 requests per minute per API key. For high-throughput applications, use the batch endpoint (`/logs`) to send up to 100 logs in a single request.

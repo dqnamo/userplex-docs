@@ -2,8 +2,8 @@
   "$schema": "https://mintlify.com/docs.json",
   "name": "Userplex",
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logo/logo-white.svg",
+    "dark": "/logo/logo-black.svg"
   },
   "theme": "maple",
   "favicon": "/favicon.svg",
@@ -14,6 +14,12 @@
   },
   "fonts": {
     "family": "Geist"
+  },
+  "api": {
+    "baseUrl": "https://api.userplex.app",
+    "auth": {
+      "method": "bearer"
+    }
   },
   "navigation": {
     "groups": [
@@ -35,7 +41,13 @@
       },
       {
         "group": "API Reference",
-        "openapi": "https://api.userplex.app/openapi"
+        "pages": [
+          "api-reference/introduction"
+        ]
+      },
+      {
+        "group": "Endpoints",
+        "openapi": "/api-reference/openapi.json"
       }
     ]
   }

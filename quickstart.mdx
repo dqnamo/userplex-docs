@@ -8,46 +8,133 @@ This guide shows you how to integrate Userplex into your application. You'll lea
 ## 1. Get your API Key
 
 You need an API key to send data to Userplex.
-1. Log in to the [Userplex Dashboard](https://app.userplex.com).
+1. Log in to the [Userplex Dashboard](https://app.userplex.app).
 2. Go to **Settings > Developer**.
 3. Copy your **Publishable Key**.
 
 ## 2. Install the SDK
 
-Install the official Node.js library.
+<Tabs>
+  <Tab title="TypeScript">
+    Install the official TypeScript/JavaScript library:
 
-```bash
-npm install userplex-node
-```
+    ```bash
+    npm install userplex
+    ```
+  </Tab>
+  <Tab title="Ruby">
+    Add the gem to your Gemfile:
+
+    ```ruby
+    gem "userplex"
+    ```
+
+    Then run:
+
+    ```bash
+    bundle install
+    ```
+
+    Or install directly:
+
+    ```bash
+    gem install userplex
+    ```
+  </Tab>
+</Tabs>
 
 ## 3. Initialize the client
 
-Import the library and pass your API key.
+<Tabs>
+  <Tab title="TypeScript">
+    ```typescript
+    import Userplex from 'userplex';
 
-```typescript
-import Userplex from 'userplex-node';
+    const client = new Userplex({
+      apiKey: process.env['USERPLEX_API_KEY'], // e.g. 'sk_live_...'
+    });
+    ```
+  </Tab>
+  <Tab title="Ruby">
+    ```ruby
+    require "userplex"
 
-const client = new Userplex({
-  apiKey: process.env.USERPLEX_API_KEY, // e.g. 'sk_live_...'
-});
-```
+    userplex = Userplex::Client.new(
+      api_key: ENV["USERPLEX_API_KEY"] # e.g. 'sk_live_...'
+    )
+    ```
+  </Tab>
+</Tabs>
 
 ## 4. Send a log
 
 Send a test log to verify your integration.
 
-```typescript
-await client.log({
-  name: 'test.log',
-  user_id: 'internal_user',
-  data: {
-    message: 'Hello World',
-    browser: 'Chrome'
-  }
-});
-```
+<Tabs>
+  <Tab title="TypeScript">
+    ```typescript
+    const response = await client.logs.new({
+      name: 'test.log',
+      user_id: 'internal_user',
+      data: {
+        message: 'Hello World',
+        browser: 'Chrome'
+      }
+    });
 
-Check your [Dashboard](https://app.userplex.com/events) — you should see the log appear instantly.
+    console.log(response.success); // true
+    ```
+  </Tab>
+  <Tab title="Ruby">
+    ```ruby
+    response = userplex.logs.new(
+      name: "test.log",
+      user_id: "internal_user",
+      data: {
+        message: "Hello World",
+        browser: "Chrome"
+      }
+    )
+
+    puts(response.success) # true
+    ```
+  </Tab>
+</Tabs>
+
+Check your [Dashboard](https://app.userplex.app) — you should see the log appear instantly.
+
+## 5. Identify a user (optional)
+
+Associate user traits to enrich your logs with user context.
+
+<Tabs>
+  <Tab title="TypeScript">
+    ```typescript
+    await client.users.identify({
+      user_id: 'user_123',
+      email: 'grace@hopper.com',
+      name: 'Grace Hopper',
+      attributes: {
+        plan: 'enterprise',
+        team_size: 15
+      }
+    });
+    ```
+  </Tab>
+  <Tab title="Ruby">
+    ```ruby
+    userplex.users.identify(
+      user_id: "user_123",
+      email: "grace@hopper.com",
+      name: "Grace Hopper",
+      attributes: {
+        plan: "enterprise",
+        team_size: 15
+      }
+    )
+    ```
+  </Tab>
+</Tabs>
 
 ## Next steps
 
@@ -57,5 +144,11 @@ Check your [Dashboard](https://app.userplex.com/events) — you should see the l
   </Card>
   <Card title="Datasources" icon="database" href="/essentials/datasources">
     Connect your production database for deeper insights.
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/introduction">
+    Explore the full API documentation.
+  </Card>
+  <Card title="Logs" icon="list" href="/essentials/logs">
+    Learn log best practices and batching.
   </Card>
 </CardGroup>
