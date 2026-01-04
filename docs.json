@@ -5,11 +5,15 @@
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
   },
+  "theme": "maple",
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#737373",
+    "light": "#a3a3a3",
+    "dark": "#404040"
+  },
+  "fonts": {
+    "family": "Geist"
   },
   "navigation": {
     "groups": [
