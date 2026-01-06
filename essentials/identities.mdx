@@ -12,9 +12,9 @@ Call `users.identify` when a user signs up or updates their profile. You only ne
 <Tabs>
   <Tab title="TypeScript">
     ```typescript
-    import SeerStack from 'seerstack';
+    import Seerstack from 'seerstack';
 
-    const client = new SeerStack({
+    const client = new Seerstack({
       apiKey: process.env['SEERSTACK_API_KEY'],
     });
 
@@ -34,7 +34,7 @@ Call `users.identify` when a user signs up or updates their profile. You only ne
     ```ruby
     require "seerstack"
 
-    seerstack = SeerStack::Client.new(
+    seerstack = Seerstack::Client.new(
       api_key: ENV["SEERSTACK_API_KEY"]
     )
 

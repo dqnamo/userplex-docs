@@ -48,9 +48,9 @@ You need an API key to send data to SeerStack.
 <Tabs>
   <Tab title="TypeScript">
     ```typescript
-    import SeerStack from 'seerstack';
+    import Seerstack from 'seerstack';
 
-    const client = new SeerStack({
+    const client = new Seerstack({
       apiKey: process.env['SEERSTACK_API_KEY'], // e.g. 'sk_live_...'
     });
     ```
@@ -59,7 +59,7 @@ You need an API key to send data to SeerStack.
     ```ruby
     require "seerstack"
 
-    seerstack = SeerStack::Client.new(
+    seerstack = Seerstack::Client.new(
       api_key: ENV["SEERSTACK_API_KEY"] # e.g. 'sk_live_...'
     )
     ```

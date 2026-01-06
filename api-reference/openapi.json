@@ -31,12 +31,12 @@
           {
             "lang": "typescript",
             "label": "TypeScript SDK",
-            "source": "import SeerStack from 'seerstack';\n\nconst client = new SeerStack({\n  apiKey: process.env['SEERSTACK_API_KEY'],\n});\n\nconst response = await client.events.capture({\n  name: 'invoice.paid',\n  user_id: 'user_123',\n  data: {\n    invoice_id: 'inv_993',\n    amount: 2000,\n    currency: 'usd'\n  }\n});\n\nconsole.log(response.success);"
+            "source": "import Seerstack from 'seerstack';\n\nconst client = new Seerstack({\n  apiKey: process.env['SEERSTACK_API_KEY'],\n});\n\nconst response = await client.events.capture({\n  name: 'invoice.paid',\n  user_id: 'user_123',\n  data: {\n    invoice_id: 'inv_993',\n    amount: 2000,\n    currency: 'usd'\n  }\n});\n\nconsole.log(response.success);"
           },
           {
             "lang": "ruby",
             "label": "Ruby SDK",
-            "source": "require \"seerstack\"\n\nseerstack = SeerStack::Client.new(\n  api_key: ENV[\"SEERSTACK_API_KEY\"]\n)\n\nresponse = seerstack.events.capture(\n  name: \"invoice.paid\",\n  user_id: \"user_123\",\n  data: {\n    invoice_id: \"inv_993\",\n    amount: 2000,\n    currency: \"usd\"\n  }\n)\n\nputs(response.success)"
+            "source": "require \"seerstack\"\n\nseerstack = Seerstack::Client.new(\n  api_key: ENV[\"SEERSTACK_API_KEY\"]\n)\n\nresponse = seerstack.events.capture(\n  name: \"invoice.paid\",\n  user_id: \"user_123\",\n  data: {\n    invoice_id: \"inv_993\",\n    amount: 2000,\n    currency: \"usd\"\n  }\n)\n\nputs(response.success)"
           },
           {
             "lang": "bash",
@@ -122,12 +122,12 @@
           {
             "lang": "typescript",
             "label": "TypeScript SDK",
-            "source": "import SeerStack from 'seerstack';\n\nconst client = new SeerStack({\n  apiKey: process.env['SEERSTACK_API_KEY'],\n});\n\nconst response = await client.users.identify({\n  user_id: 'user_123',\n  email: 'grace@hopper.com',\n  name: 'Grace Hopper',\n  attributes: {\n    plan: 'enterprise',\n    team_size: 15,\n    is_admin: true\n  }\n});\n\nconsole.log(response.success);"
+            "source": "import Seerstack from 'seerstack';\n\nconst client = new Seerstack({\n  apiKey: process.env['SEERSTACK_API_KEY'],\n});\n\nconst response = await client.users.identify({\n  user_id: 'user_123',\n  email: 'grace@hopper.com',\n  name: 'Grace Hopper',\n  attributes: {\n    plan: 'enterprise',\n    team_size: 15,\n    is_admin: true\n  }\n});\n\nconsole.log(response.success);"
           },
           {
             "lang": "ruby",
             "label": "Ruby SDK",
-            "source": "require \"seerstack\"\n\nseerstack = SeerStack::Client.new(\n  api_key: ENV[\"SEERSTACK_API_KEY\"]\n)\n\nresponse = seerstack.users.identify(\n  user_id: \"user_123\",\n  email: \"grace@hopper.com\",\n  name: \"Grace Hopper\",\n  attributes: {\n    plan: \"enterprise\",\n    team_size: 15,\n    is_admin: true\n  }\n)\n\nputs(response.success)"
+            "source": "require \"seerstack\"\n\nseerstack = Seerstack::Client.new(\n  api_key: ENV[\"SEERSTACK_API_KEY\"]\n)\n\nresponse = seerstack.users.identify(\n  user_id: \"user_123\",\n  email: \"grace@hopper.com\",\n  name: \"Grace Hopper\",\n  attributes: {\n    plan: \"enterprise\",\n    team_size: 15,\n    is_admin: true\n  }\n)\n\nputs(response.success)"
           },
           {
             "lang": "bash",
