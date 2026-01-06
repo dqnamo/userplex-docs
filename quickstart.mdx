@@ -1,9 +1,9 @@
 ---
 title: Quickstart
-description: Start tracking logs in minutes.
+description: Start tracking events in minutes.
 ---
 
-This guide shows you how to integrate Userplex into your application. You'll learn how to authenticate, identify users, and send your first log.
+This guide shows you how to integrate Userplex into your application. You'll learn how to authenticate, identify users, and send your first event.
 
 ## 1. Get your API Key
 
@@ -66,15 +66,15 @@ You need an API key to send data to Userplex.
   </Tab>
 </Tabs>
 
-## 4. Send a log
+## 4. Send an event
 
-Send a test log to verify your integration.
+Send a test event to verify your integration.
 
 <Tabs>
   <Tab title="TypeScript">
     ```typescript
-    const response = await client.logs.new({
-      name: 'test.log',
+    const response = await client.events.capture({
+      name: 'test.event',
       user_id: 'internal_user',
       data: {
         message: 'Hello World',
@@ -87,8 +87,8 @@ Send a test log to verify your integration.
   </Tab>
   <Tab title="Ruby">
     ```ruby
-    response = userplex.logs.new(
-      name: "test.log",
+    response = userplex.events.capture(
+      name: "test.event",
       user_id: "internal_user",
       data: {
         message: "Hello World",
@@ -101,11 +101,11 @@ Send a test log to verify your integration.
   </Tab>
 </Tabs>
 
-Check your [Dashboard](https://app.userplex.app) — you should see the log appear instantly.
+Check your [Dashboard](https://app.userplex.app) — you should see the event appear instantly.
 
 ## 5. Identify a user (optional)
 
-Associate user traits to enrich your logs with user context.
+Associate user traits to enrich your events with user context.
 
 <Tabs>
   <Tab title="TypeScript">
@@ -148,7 +148,7 @@ Associate user traits to enrich your logs with user context.
   <Card title="API Reference" icon="code" href="/api-reference/introduction">
     Explore the full API documentation.
   </Card>
-  <Card title="Logs" icon="list" href="/essentials/logs">
-    Learn log best practices and batching.
+  <Card title="Events" icon="list" href="/essentials/events">
+    Learn event best practices.
   </Card>
 </CardGroup>

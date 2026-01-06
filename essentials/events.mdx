@@ -1,0 +1,96 @@
+---
+title: Events
+description: Track user actions and system behavior.
+---
+
+Events are the immutable history of what happens in your application. An event consists of a name, a timestamp, and a JSON payload.
+
+## Event Structure
+
+A valid event object contains the following fields:
+
+| Field | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `name` | string | **Yes** | The name of the event (e.g., `signup.completed`). |
+| `user_id` | string | No | The ID of the user who performed the action. |
+| `data` | object | No | Arbitrary JSON object with event properties. |
+| `timestamp` | string | No | ISO 8601 timestamp. Defaults to `now`. |
+
+## Sending Events
+
+Use the `events.capture` method to record an event.
+
+<Tabs>
+  <Tab title="TypeScript">
+    ```typescript
+    import Userplex from 'userplex';
+
+    const client = new Userplex({
+      apiKey: process.env['USERPLEX_API_KEY'],
+    });
+
+    await client.events.capture({
+      name: 'invoice.paid',
+      user_id: 'cus_8374',
+      data: {
+        invoice_id: 'inv_993',
+        amount: 2000,
+        currency: 'usd'
+      }
+    });
+    ```
+  </Tab>
+  <Tab title="Ruby">
+    ```ruby
+    require "userplex"
+
+    userplex = Userplex::Client.new(
+      api_key: ENV["USERPLEX_API_KEY"]
+    )
+
+    userplex.events.capture(
+      name: "invoice.paid",
+      user_id: "cus_8374",
+      data: {
+        invoice_id: "inv_993",
+        amount: 2000,
+        currency: "usd"
+      }
+    )
+    ```
+  </Tab>
+  <Tab title="cURL">
+    ```bash
+    curl -X POST https://api.userplex.app/capture \
+      -H "Authorization: Bearer $USERPLEX_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "name": "invoice.paid",
+        "user_id": "cus_8374",
+        "data": {
+          "invoice_id": "inv_993",
+          "amount": 2000,
+          "currency": "usd"
+        }
+      }'
+    ```
+  </Tab>
+</Tabs>
+
+## Naming Conventions
+
+We recommend using a `noun.verb` syntax for your event names. This keeps your data organized and easy to search.
+
+<CardGroup cols={2}>
+  <Card title="Good" icon="check" color="#16A34A">
+    * `project.created`
+    * `user.signup`
+    * `payment.failed`
+  </Card>
+  <Card title="Bad" icon="xmark" color="#DC2626">
+    * `created project`
+    * `User Clicked Signup Button`
+    * `fail`
+  </Card>
+</CardGroup>
+

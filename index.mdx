@@ -3,11 +3,11 @@ title: Introduction
 description: Userplex is the observability platform for your product's user behavior.
 ---
 
-Userplex lets you ingest user logs, unify identities, and visualize data using natural language. It's built for developers who need to understand how their product is being used without spending hours building the perfect dashboards.
+Userplex lets you ingest user events, unify identities, and visualize data using natural language. It's built for developers who need to understand how their product is being used without spending hours building the perfect dashboards.
 
 ## How it works
 
-1.  **Ingest**: Send JSON logs and user traits via our API.
+1.  **Ingest**: Send JSON events and user traits via our API.
 2.  **Process**: We validate, enrich, and store your data in real-time.
 3.  **Visualize**: Use the dashboard to ask questions like "Show me daily active users" and get instant charts.
 
@@ -15,10 +15,10 @@ Userplex lets you ingest user logs, unify identities, and visualize data using n
 
 <CardGroup cols={2}>
   <Card title="Quickstart" icon="rocket" href="/quickstart">
-    Send your first log in less than 5 minutes.
+    Send your first event in less than 5 minutes.
   </Card>
-  <Card title="Logs" icon="list-ul" href="/essentials/logs">
-    Learn how to structure and send high-quality logs.
+  <Card title="Events" icon="list-ul" href="/essentials/events">
+    Learn how to structure and send high-quality events.
   </Card>
   <Card title="Identities" icon="user" href="/essentials/identities">
     Understand how to track users and their attributes.
@@ -30,22 +30,22 @@ Userplex lets you ingest user logs, unify identities, and visualize data using n
 
 ## Example
 
-Here is a complete example of identifying a user and sending a log.
+Here is a complete example of identifying a user and sending an event.
 
 ```typescript
-import Userplex from 'userplex-node';
+import Userplex from 'userplex';
 
 const client = new Userplex({ apiKey: 'sk_live_...' });
 
 // 1. Identify the user
-await client.identify({
+await client.users.identify({
   user_id: 'user_123',
   name: 'Jane Doe',
   email: 'jane@example.com'
 });
 
-// 2. Send a log
-await client.log({
+// 2. Send an event
+await client.events.capture({
   name: 'payment.succeeded',
   user_id: 'user_123',
   data: {

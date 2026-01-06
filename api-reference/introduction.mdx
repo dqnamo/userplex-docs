@@ -3,7 +3,7 @@ title: 'API Reference'
 description: 'Complete reference for the Userplex REST API'
 ---
 
-The Userplex API allows you to send logs, identify users, and track behavior in your applications. All API requests require authentication using a Bearer token.
+The Userplex API allows you to send events, identify users, and track behavior in your applications. All API requests require authentication using a Bearer token.
 
 ## Base URL
 
@@ -55,8 +55,8 @@ We provide official SDKs for TypeScript and Ruby that handle authentication and 
       apiKey: process.env['USERPLEX_API_KEY'],
     });
 
-    // Send a log
-    await client.logs.new({
+    // Send an event
+    await client.events.capture({
       name: 'user.signup',
       user_id: 'user_123',
       data: { plan: 'pro' }
@@ -78,8 +78,8 @@ We provide official SDKs for TypeScript and Ruby that handle authentication and 
       api_key: ENV["USERPLEX_API_KEY"]
     )
 
-    # Send a log
-    userplex.logs.new(
+    # Send an event
+    userplex.events.capture(
       name: "user.signup",
       user_id: "user_123",
       data: { plan: "pro" }
@@ -95,8 +95,8 @@ We provide official SDKs for TypeScript and Ruby that handle authentication and 
   </Tab>
   <Tab title="cURL">
     ```bash
-    # Send a log
-    curl -X POST https://api.userplex.app/log \
+    # Send an event
+    curl -X POST https://api.userplex.app/capture \
       -H "Authorization: Bearer $USERPLEX_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{"name": "user.signup", "user_id": "user_123"}'
@@ -130,4 +130,4 @@ Error responses include an `error` field with a human-readable message:
 
 ## Rate Limits
 
-The API allows up to 1,000 requests per minute per API key. For high-throughput applications, use the batch endpoint (`/logs`) to send up to 100 logs in a single request.
+The API allows up to 1,000 requests per minute per API key.

@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Userplex API",
-    "description": "The Userplex API allows you to send logs, identify users, and track user behavior in your applications.",
+    "description": "The Userplex API allows you to send events, identify users, and track user behavior in your applications.",
     "version": "1.0.0",
     "contact": {
       "name": "Userplex Support",
@@ -21,27 +21,27 @@
     }
   ],
   "paths": {
-    "/log": {
+    "/capture": {
       "post": {
-        "operationId": "createLog",
-        "summary": "Create a log",
-        "description": "Record a single log event to track user actions or system behavior.",
-        "tags": ["Logs"],
+        "operationId": "captureEvent",
+        "summary": "Capture an event",
+        "description": "Record an event to track user actions or system behavior.",
+        "tags": ["Events"],
         "x-codeSamples": [
           {
             "lang": "typescript",
             "label": "TypeScript SDK",
-            "source": "import Userplex from 'userplex';\n\nconst client = new Userplex({\n  apiKey: process.env['USERPLEX_API_KEY'],\n});\n\nconst response = await client.logs.new({\n  name: 'invoice.paid',\n  user_id: 'user_123',\n  data: {\n    invoice_id: 'inv_993',\n    amount: 2000,\n    currency: 'usd'\n  }\n});\n\nconsole.log(response.success);"
+            "source": "import Userplex from 'userplex';\n\nconst client = new Userplex({\n  apiKey: process.env['USERPLEX_API_KEY'],\n});\n\nconst response = await client.events.capture({\n  name: 'invoice.paid',\n  user_id: 'user_123',\n  data: {\n    invoice_id: 'inv_993',\n    amount: 2000,\n    currency: 'usd'\n  }\n});\n\nconsole.log(response.success);"
           },
           {
             "lang": "ruby",
             "label": "Ruby SDK",
-            "source": "require \"userplex\"\n\nuserplex = Userplex::Client.new(\n  api_key: ENV[\"USERPLEX_API_KEY\"]\n)\n\nresponse = userplex.logs.new(\n  name: \"invoice.paid\",\n  user_id: \"user_123\",\n  data: {\n    invoice_id: \"inv_993\",\n    amount: 2000,\n    currency: \"usd\"\n  }\n)\n\nputs(response.success)"
+            "source": "require \"userplex\"\n\nuserplex = Userplex::Client.new(\n  api_key: ENV[\"USERPLEX_API_KEY\"]\n)\n\nresponse = userplex.events.capture(\n  name: \"invoice.paid\",\n  user_id: \"user_123\",\n  data: {\n    invoice_id: \"inv_993\",\n    amount: 2000,\n    currency: \"usd\"\n  }\n)\n\nputs(response.success)"
           },
           {
             "lang": "bash",
             "label": "cURL",
-            "source": "curl -X POST https://api.userplex.app/log \\\n  -H \"Authorization: Bearer $USERPLEX_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"name\": \"invoice.paid\",\n    \"user_id\": \"user_123\",\n    \"data\": {\n      \"invoice_id\": \"inv_993\",\n      \"amount\": 2000,\n      \"currency\": \"usd\"\n    }\n  }'"
+            "source": "curl -X POST https://api.userplex.app/capture \\\n  -H \"Authorization: Bearer $USERPLEX_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"name\": \"invoice.paid\",\n    \"user_id\": \"user_123\",\n    \"data\": {\n      \"invoice_id\": \"inv_993\",\n      \"amount\": 2000,\n      \"currency\": \"usd\"\n    }\n  }'"
           }
         ],
         "requestBody": {
@@ -49,24 +49,24 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/LogRequest"
+                "$ref": "#/components/schemas/EventRequest"
               },
               "examples": {
                 "basic": {
-                  "summary": "Basic log",
+                  "summary": "Basic event",
                   "value": {
                     "name": "page.view"
                   }
                 },
                 "with_user": {
-                  "summary": "Log with user ID",
+                  "summary": "Event with user ID",
                   "value": {
                     "name": "button.clicked",
                     "user_id": "user_123"
                   }
                 },
                 "full": {
-                  "summary": "Full log with data",
+                  "summary": "Full event with data",
                   "value": {
                     "name": "invoice.paid",
                     "user_id": "user_123",
@@ -84,88 +84,7 @@
         },
         "responses": {
           "200": {
-            "description": "Log created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SuccessResponse"
-                },
-                "example": {
-                  "success": true
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized - Invalid or missing API key",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "error": "Missing or invalid API key"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/logs": {
-      "post": {
-        "operationId": "createLogsBatch",
-        "summary": "Create logs (batch)",
-        "description": "Record multiple log events in a single request. Use this for high-throughput applications to reduce API calls.",
-        "tags": ["Logs"],
-        "x-codeSamples": [
-          {
-            "lang": "typescript",
-            "label": "TypeScript SDK",
-            "source": "import Userplex from 'userplex';\n\nconst client = new Userplex({\n  apiKey: process.env['USERPLEX_API_KEY'],\n});\n\nconst response = await client.logs.batch({\n  body: [\n    {\n      name: 'page.view',\n      user_id: 'user_1',\n      data: { path: '/dashboard' }\n    },\n    {\n      name: 'page.view',\n      user_id: 'user_2',\n      data: { path: '/settings' }\n    },\n    {\n      name: 'button.clicked',\n      user_id: 'user_1',\n      data: { button_id: 'submit' }\n    }\n  ]\n});\n\nconsole.log(response.success);"
-          },
-          {
-            "lang": "ruby",
-            "label": "Ruby SDK",
-            "source": "require \"userplex\"\n\nuserplex = Userplex::Client.new(\n  api_key: ENV[\"USERPLEX_API_KEY\"]\n)\n\nresponse = userplex.logs.batch(\n  body: [\n    {\n      name: \"page.view\",\n      user_id: \"user_1\",\n      data: { path: \"/dashboard\" }\n    },\n    {\n      name: \"page.view\",\n      user_id: \"user_2\",\n      data: { path: \"/settings\" }\n    },\n    {\n      name: \"button.clicked\",\n      user_id: \"user_1\",\n      data: { button_id: \"submit\" }\n    }\n  ]\n)\n\nputs(response.success)"
-          },
-          {
-            "lang": "bash",
-            "label": "cURL",
-            "source": "curl -X POST https://api.userplex.app/logs \\\n  -H \"Authorization: Bearer $USERPLEX_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '[\n    {\n      \"name\": \"page.view\",\n      \"user_id\": \"user_1\",\n      \"data\": { \"path\": \"/dashboard\" }\n    },\n    {\n      \"name\": \"page.view\",\n      \"user_id\": \"user_2\",\n      \"data\": { \"path\": \"/settings\" }\n    }\n  ]'"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "description": "A list of logs to ingest",
-                "items": {
-                  "$ref": "#/components/schemas/LogRequest"
-                },
-                "minItems": 1,
-                "maxItems": 100
-              },
-              "example": [
-                {
-                  "name": "page.view",
-                  "user_id": "user_1",
-                  "data": { "path": "/dashboard" }
-                },
-                {
-                  "name": "page.view",
-                  "user_id": "user_2",
-                  "data": { "path": "/settings" }
-                }
-              ]
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Logs created successfully",
+            "description": "Event captured successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -197,7 +116,7 @@
       "post": {
         "operationId": "identifyUser",
         "summary": "Identify a user",
-        "description": "Associate traits and attributes with a user ID. Once identified, all future logs with this user_id will be enriched with these attributes.",
+        "description": "Associate traits and attributes with a user ID. Once identified, all future events with this user_id will be enriched with these attributes.",
         "tags": ["Users"],
         "x-codeSamples": [
           {
@@ -281,18 +200,18 @@
   },
   "components": {
     "schemas": {
-      "LogRequest": {
+      "EventRequest": {
         "type": "object",
         "required": ["name"],
         "properties": {
           "name": {
             "type": "string",
-            "description": "The name of the log event. We recommend using `noun.verb` syntax (e.g., `invoice.paid`, `user.signup`).",
+            "description": "The name of the event. We recommend using `noun.verb` syntax (e.g., `invoice.paid`, `user.signup`).",
             "example": "invoice.paid"
           },
           "user_id": {
             "type": "string",
-            "description": "The external user ID associated with this log. Use your database's primary key.",
+            "description": "The external user ID associated with this event. Use your database's primary key.",
             "example": "user_123"
           },
           "timestamp": {
@@ -304,7 +223,7 @@
           "data": {
             "type": "object",
             "additionalProperties": true,
-            "description": "Additional data to include with the log. Can contain any JSON-serializable values.",
+            "description": "Additional data to include with the event. Can contain any JSON-serializable values.",
             "example": {
               "invoice_id": "inv_993",
               "amount": 2000,
@@ -378,7 +297,7 @@
   },
   "tags": [
     {
-      "name": "Logs",
+      "name": "Events",
       "description": "Track user actions and system events"
     },
     {

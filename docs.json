@@ -33,7 +33,7 @@
       {
         "group": "Essentials",
         "pages": [
-          "essentials/logs",
+          "essentials/events",
           "essentials/identities",
           "essentials/visualization",
           "essentials/datasources"
