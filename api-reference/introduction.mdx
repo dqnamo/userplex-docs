@@ -10,7 +10,7 @@ The SeerStack API allows you to send events, identify users, and track behavior 
 All API requests should be made to:
 
 ```
-https://api.seerstack.app
+https://api.seerstack.com
 ```
 
 ## Authentication
@@ -21,7 +21,7 @@ Authenticate your requests by including your API key as a Bearer token in the `A
 Authorization: Bearer sk_live_your_api_key
 ```
 
-You can find your API key in the [SeerStack Dashboard](https://app.seerstack.app) under **Settings > Developer**.
+You can find your API key in the [SeerStack Dashboard](https://app.seerstack.com) under **Settings > Developer**.
 
 <Warning>
   Keep your API key secure. Never expose it in client-side code or commit it to version control.
@@ -96,13 +96,13 @@ We provide official SDKs for TypeScript and Ruby that handle authentication and 
   <Tab title="cURL">
     ```bash
     # Send an event
-    curl -X POST https://api.seerstack.app/capture \
+    curl -X POST https://api.seerstack.com/capture \
       -H "Authorization: Bearer $SEERSTACK_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{"name": "user.signup", "user_id": "user_123"}'
 
     # Identify a user
-    curl -X POST https://api.seerstack.app/identify \
+    curl -X POST https://api.seerstack.com/identify \
       -H "Authorization: Bearer $SEERSTACK_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{"user_id": "user_123", "email": "user@example.com"}'

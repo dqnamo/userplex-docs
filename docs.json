@@ -16,7 +16,7 @@
     "family": "Geist"
   },
   "api": {
-    "baseUrl": "https://api.seerstack.app",
+    "baseUrl": "https://api.seerstack.com",
     "auth": {
       "method": "bearer"
     }
@@ -25,10 +25,7 @@
     "groups": [
       {
         "group": "Getting Started",
-        "pages": [
-          "index",
-          "quickstart"
-        ]
+        "pages": ["index", "quickstart"]
       },
       {
         "group": "Essentials",
@@ -41,9 +38,7 @@
       },
       {
         "group": "API Reference",
-        "pages": [
-          "api-reference/introduction"
-        ]
+        "pages": ["api-reference/introduction"]
       },
       {
         "group": "Endpoints",

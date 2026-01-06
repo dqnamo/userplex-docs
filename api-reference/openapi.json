@@ -6,12 +6,12 @@
     "version": "1.0.0",
     "contact": {
       "name": "SeerStack Support",
-      "url": "https://seerstack.app"
+      "url": "https://seerstack.com"
     }
   },
   "servers": [
     {
-      "url": "https://api.seerstack.app",
+      "url": "https://api.seerstack.com",
       "description": "Production API"
     }
   ],
@@ -41,7 +41,7 @@
           {
             "lang": "bash",
             "label": "cURL",
-            "source": "curl -X POST https://api.seerstack.app/capture \\\n  -H \"Authorization: Bearer $SEERSTACK_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"name\": \"invoice.paid\",\n    \"user_id\": \"user_123\",\n    \"data\": {\n      \"invoice_id\": \"inv_993\",\n      \"amount\": 2000,\n      \"currency\": \"usd\"\n    }\n  }'"
+            "source": "curl -X POST https://api.seerstack.com/capture \\\n  -H \"Authorization: Bearer $SEERSTACK_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"name\": \"invoice.paid\",\n    \"user_id\": \"user_123\",\n    \"data\": {\n      \"invoice_id\": \"inv_993\",\n      \"amount\": 2000,\n      \"currency\": \"usd\"\n    }\n  }'"
           }
         ],
         "requestBody": {
@@ -132,7 +132,7 @@
           {
             "lang": "bash",
             "label": "cURL",
-            "source": "curl -X POST https://api.seerstack.app/identify \\\n  -H \"Authorization: Bearer $SEERSTACK_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"user_id\": \"user_123\",\n    \"email\": \"grace@hopper.com\",\n    \"name\": \"Grace Hopper\",\n    \"attributes\": {\n      \"plan\": \"enterprise\",\n      \"team_size\": 15,\n      \"is_admin\": true\n    }\n  }'"
+            "source": "curl -X POST https://api.seerstack.com/identify \\\n  -H \"Authorization: Bearer $SEERSTACK_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"user_id\": \"user_123\",\n    \"email\": \"grace@hopper.com\",\n    \"name\": \"Grace Hopper\",\n    \"attributes\": {\n      \"plan\": \"enterprise\",\n      \"team_size\": 15,\n      \"is_admin\": true\n    }\n  }'"
           }
         ],
         "requestBody": {
