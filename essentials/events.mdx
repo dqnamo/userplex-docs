@@ -23,10 +23,10 @@ Use the `events.capture` method to record an event.
 <Tabs>
   <Tab title="TypeScript">
     ```typescript
-    import Userplex from 'userplex';
+    import SeerStack from 'seerstack';
 
-    const client = new Userplex({
-      apiKey: process.env['USERPLEX_API_KEY'],
+    const client = new SeerStack({
+      apiKey: process.env['SEERSTACK_API_KEY'],
     });
 
     await client.events.capture({
@@ -42,13 +42,13 @@ Use the `events.capture` method to record an event.
   </Tab>
   <Tab title="Ruby">
     ```ruby
-    require "userplex"
+    require "seerstack"
 
-    userplex = Userplex::Client.new(
-      api_key: ENV["USERPLEX_API_KEY"]
+    seerstack = SeerStack::Client.new(
+      api_key: ENV["SEERSTACK_API_KEY"]
     )
 
-    userplex.events.capture(
+    seerstack.events.capture(
       name: "invoice.paid",
       user_id: "cus_8374",
       data: {
@@ -61,8 +61,8 @@ Use the `events.capture` method to record an event.
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST https://api.userplex.app/capture \
-      -H "Authorization: Bearer $USERPLEX_API_KEY" \
+    curl -X POST https://api.seerstack.app/capture \
+      -H "Authorization: Bearer $SEERSTACK_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "name": "invoice.paid",

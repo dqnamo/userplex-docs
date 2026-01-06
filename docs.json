@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "name": "Userplex",
+  "name": "SeerStack",
   "logo": {
     "light": "/logo/logo-black.svg",
     "dark": "/logo/logo-white.svg"
@@ -16,7 +16,7 @@
     "family": "Geist"
   },
   "api": {
-    "baseUrl": "https://api.userplex.app",
+    "baseUrl": "https://api.seerstack.app",
     "auth": {
       "method": "bearer"
     }

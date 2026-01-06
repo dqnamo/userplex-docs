@@ -3,12 +3,12 @@ title: Quickstart
 description: Start tracking events in minutes.
 ---
 
-This guide shows you how to integrate Userplex into your application. You'll learn how to authenticate, identify users, and send your first event.
+This guide shows you how to integrate SeerStack into your application. You'll learn how to authenticate, identify users, and send your first event.
 
 ## 1. Get your API Key
 
-You need an API key to send data to Userplex.
-1. Log in to the [Userplex Dashboard](https://app.userplex.app).
+You need an API key to send data to SeerStack.
+1. Log in to the [SeerStack Dashboard](https://app.seerstack.app).
 2. Go to **Settings > Developer**.
 3. Copy your **Publishable Key**.
 
@@ -19,14 +19,14 @@ You need an API key to send data to Userplex.
     Install the official TypeScript/JavaScript library:
 
     ```bash
-    npm install userplex
+    npm install seerstack
     ```
   </Tab>
   <Tab title="Ruby">
     Add the gem to your Gemfile:
 
     ```ruby
-    gem "userplex"
+    gem "seerstack"
     ```
 
     Then run:
@@ -38,7 +38,7 @@ You need an API key to send data to Userplex.
     Or install directly:
 
     ```bash
-    gem install userplex
+    gem install seerstack
     ```
   </Tab>
 </Tabs>
@@ -48,19 +48,19 @@ You need an API key to send data to Userplex.
 <Tabs>
   <Tab title="TypeScript">
     ```typescript
-    import Userplex from 'userplex';
+    import SeerStack from 'seerstack';
 
-    const client = new Userplex({
-      apiKey: process.env['USERPLEX_API_KEY'], // e.g. 'sk_live_...'
+    const client = new SeerStack({
+      apiKey: process.env['SEERSTACK_API_KEY'], // e.g. 'sk_live_...'
     });
     ```
   </Tab>
   <Tab title="Ruby">
     ```ruby
-    require "userplex"
+    require "seerstack"
 
-    userplex = Userplex::Client.new(
-      api_key: ENV["USERPLEX_API_KEY"] # e.g. 'sk_live_...'
+    seerstack = SeerStack::Client.new(
+      api_key: ENV["SEERSTACK_API_KEY"] # e.g. 'sk_live_...'
     )
     ```
   </Tab>
@@ -87,7 +87,7 @@ Send a test event to verify your integration.
   </Tab>
   <Tab title="Ruby">
     ```ruby
-    response = userplex.events.capture(
+    response = seerstack.events.capture(
       name: "test.event",
       user_id: "internal_user",
       data: {
@@ -101,7 +101,7 @@ Send a test event to verify your integration.
   </Tab>
 </Tabs>
 
-Check your [Dashboard](https://app.userplex.app) — you should see the event appear instantly.
+Check your [Dashboard](https://app.seerstack.app) — you should see the event appear instantly.
 
 ## 5. Identify a user (optional)
 
@@ -123,7 +123,7 @@ Associate user traits to enrich your events with user context.
   </Tab>
   <Tab title="Ruby">
     ```ruby
-    userplex.users.identify(
+    seerstack.users.identify(
       user_id: "user_123",
       email: "grace@hopper.com",
       name: "Grace Hopper",

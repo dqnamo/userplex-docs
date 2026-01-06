@@ -3,7 +3,7 @@ title: Identities
 description: Manage user profiles and attributes.
 ---
 
-Identities allow you to attach permanent traits to a `user_id`. When you send logs with that `user_id`, Userplex automatically associates the log with these traits.
+Identities allow you to attach permanent traits to a `user_id`. When you send logs with that `user_id`, SeerStack automatically associates the log with these traits.
 
 ## Identifying Users
 
@@ -12,10 +12,10 @@ Call `users.identify` when a user signs up or updates their profile. You only ne
 <Tabs>
   <Tab title="TypeScript">
     ```typescript
-    import Userplex from 'userplex';
+    import SeerStack from 'seerstack';
 
-    const client = new Userplex({
-      apiKey: process.env['USERPLEX_API_KEY'],
+    const client = new SeerStack({
+      apiKey: process.env['SEERSTACK_API_KEY'],
     });
 
     await client.users.identify({
@@ -32,13 +32,13 @@ Call `users.identify` when a user signs up or updates their profile. You only ne
   </Tab>
   <Tab title="Ruby">
     ```ruby
-    require "userplex"
+    require "seerstack"
 
-    userplex = Userplex::Client.new(
-      api_key: ENV["USERPLEX_API_KEY"]
+    seerstack = SeerStack::Client.new(
+      api_key: ENV["SEERSTACK_API_KEY"]
     )
 
-    userplex.users.identify(
+    seerstack.users.identify(
       user_id: "user_123", # Your internal ID
       email: "grace@hopper.com",
       name: "Grace Hopper",
@@ -52,8 +52,8 @@ Call `users.identify` when a user signs up or updates their profile. You only ne
   </Tab>
   <Tab title="cURL">
     ```bash
-    curl -X POST https://api.userplex.app/identify \
-      -H "Authorization: Bearer $USERPLEX_API_KEY" \
+    curl -X POST https://api.seerstack.app/identify \
+      -H "Authorization: Bearer $SEERSTACK_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "user_id": "user_123",
@@ -87,7 +87,7 @@ Call `users.identify` when a user signs up or updates their profile. You only ne
 Once a user is identified, you can use their attributes in your dashboard filters.
 
 <Note>
-If you filter by `attributes.plan = 'enterprise'`, Userplex will find all logs triggered by users with that plan, even if the log payload itself didn't contain the plan name.
+If you filter by `attributes.plan = 'enterprise'`, SeerStack will find all logs triggered by users with that plan, even if the log payload itself didn't contain the plan name.
 </Note>
 
 ## Updating User Attributes
@@ -114,14 +114,14 @@ You can call `identify` multiple times. Each call merges new attributes with exi
   <Tab title="Ruby">
     ```ruby
     # Initial identification
-    userplex.users.identify(
+    seerstack.users.identify(
       user_id: "user_123",
       email: "grace@hopper.com",
       attributes: { plan: "free" }
     )
 
     # Later, when user upgrades
-    userplex.users.identify(
+    seerstack.users.identify(
       user_id: "user_123",
       attributes: { plan: "enterprise", upgraded_at: Time.now.iso8601 }
     )

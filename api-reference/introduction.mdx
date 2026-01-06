@@ -1,16 +1,16 @@
 ---
 title: 'API Reference'
-description: 'Complete reference for the Userplex REST API'
+description: 'Complete reference for the SeerStack REST API'
 ---
 
-The Userplex API allows you to send events, identify users, and track behavior in your applications. All API requests require authentication using a Bearer token.
+The SeerStack API allows you to send events, identify users, and track behavior in your applications. All API requests require authentication using a Bearer token.
 
 ## Base URL
 
 All API requests should be made to:
 
 ```
-https://api.userplex.app
+https://api.seerstack.app
 ```
 
 ## Authentication
@@ -21,7 +21,7 @@ Authenticate your requests by including your API key as a Bearer token in the `A
 Authorization: Bearer sk_live_your_api_key
 ```
 
-You can find your API key in the [Userplex Dashboard](https://app.userplex.app) under **Settings > Developer**.
+You can find your API key in the [SeerStack Dashboard](https://app.seerstack.app) under **Settings > Developer**.
 
 <Warning>
   Keep your API key secure. Never expose it in client-side code or commit it to version control.
@@ -32,14 +32,14 @@ You can find your API key in the [Userplex Dashboard](https://app.userplex.app) 
 We provide official SDKs for TypeScript and Ruby that handle authentication and provide a better developer experience.
 
 <CardGroup cols={2}>
-  <Card title="TypeScript SDK" icon="js" href="https://www.npmjs.com/package/userplex">
+  <Card title="TypeScript SDK" icon="js" href="https://www.npmjs.com/package/seerstack">
     ```bash
-    npm install userplex
+    npm install seerstack
     ```
   </Card>
-  <Card title="Ruby SDK" icon="gem" href="https://rubygems.org/gems/userplex">
+  <Card title="Ruby SDK" icon="gem" href="https://rubygems.org/gems/seerstack">
     ```bash
-    gem install userplex
+    gem install seerstack
     ```
   </Card>
 </CardGroup>
@@ -49,10 +49,10 @@ We provide official SDKs for TypeScript and Ruby that handle authentication and 
 <Tabs>
   <Tab title="TypeScript">
     ```typescript
-    import Userplex from 'userplex';
+    import SeerStack from 'seerstack';
 
-    const client = new Userplex({
-      apiKey: process.env['USERPLEX_API_KEY'],
+    const client = new SeerStack({
+      apiKey: process.env['SEERSTACK_API_KEY'],
     });
 
     // Send an event
@@ -72,21 +72,21 @@ We provide official SDKs for TypeScript and Ruby that handle authentication and 
   </Tab>
   <Tab title="Ruby">
     ```ruby
-    require "userplex"
+    require "seerstack"
 
-    userplex = Userplex::Client.new(
-      api_key: ENV["USERPLEX_API_KEY"]
+    seerstack = SeerStack::Client.new(
+      api_key: ENV["SEERSTACK_API_KEY"]
     )
 
     # Send an event
-    userplex.events.capture(
+    seerstack.events.capture(
       name: "user.signup",
       user_id: "user_123",
       data: { plan: "pro" }
     )
 
     # Identify a user
-    userplex.users.identify(
+    seerstack.users.identify(
       user_id: "user_123",
       email: "user@example.com",
       name: "Jane Doe"
@@ -96,14 +96,14 @@ We provide official SDKs for TypeScript and Ruby that handle authentication and 
   <Tab title="cURL">
     ```bash
     # Send an event
-    curl -X POST https://api.userplex.app/capture \
-      -H "Authorization: Bearer $USERPLEX_API_KEY" \
+    curl -X POST https://api.seerstack.app/capture \
+      -H "Authorization: Bearer $SEERSTACK_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{"name": "user.signup", "user_id": "user_123"}'
 
     # Identify a user
-    curl -X POST https://api.userplex.app/identify \
-      -H "Authorization: Bearer $USERPLEX_API_KEY" \
+    curl -X POST https://api.seerstack.app/identify \
+      -H "Authorization: Bearer $SEERSTACK_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{"user_id": "user_123", "email": "user@example.com"}'
     ```

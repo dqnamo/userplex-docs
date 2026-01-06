@@ -1,17 +1,17 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Userplex API",
-    "description": "The Userplex API allows you to send events, identify users, and track user behavior in your applications.",
+    "title": "SeerStack API",
+    "description": "The SeerStack API allows you to send events, identify users, and track user behavior in your applications.",
     "version": "1.0.0",
     "contact": {
-      "name": "Userplex Support",
-      "url": "https://userplex.app"
+      "name": "SeerStack Support",
+      "url": "https://seerstack.app"
     }
   },
   "servers": [
     {
-      "url": "https://api.userplex.app",
+      "url": "https://api.seerstack.app",
       "description": "Production API"
     }
   ],
@@ -31,17 +31,17 @@
           {
             "lang": "typescript",
             "label": "TypeScript SDK",
-            "source": "import Userplex from 'userplex';\n\nconst client = new Userplex({\n  apiKey: process.env['USERPLEX_API_KEY'],\n});\n\nconst response = await client.events.capture({\n  name: 'invoice.paid',\n  user_id: 'user_123',\n  data: {\n    invoice_id: 'inv_993',\n    amount: 2000,\n    currency: 'usd'\n  }\n});\n\nconsole.log(response.success);"
+            "source": "import SeerStack from 'seerstack';\n\nconst client = new SeerStack({\n  apiKey: process.env['SEERSTACK_API_KEY'],\n});\n\nconst response = await client.events.capture({\n  name: 'invoice.paid',\n  user_id: 'user_123',\n  data: {\n    invoice_id: 'inv_993',\n    amount: 2000,\n    currency: 'usd'\n  }\n});\n\nconsole.log(response.success);"
           },
           {
             "lang": "ruby",
             "label": "Ruby SDK",
-            "source": "require \"userplex\"\n\nuserplex = Userplex::Client.new(\n  api_key: ENV[\"USERPLEX_API_KEY\"]\n)\n\nresponse = userplex.events.capture(\n  name: \"invoice.paid\",\n  user_id: \"user_123\",\n  data: {\n    invoice_id: \"inv_993\",\n    amount: 2000,\n    currency: \"usd\"\n  }\n)\n\nputs(response.success)"
+            "source": "require \"seerstack\"\n\nseerstack = SeerStack::Client.new(\n  api_key: ENV[\"SEERSTACK_API_KEY\"]\n)\n\nresponse = seerstack.events.capture(\n  name: \"invoice.paid\",\n  user_id: \"user_123\",\n  data: {\n    invoice_id: \"inv_993\",\n    amount: 2000,\n    currency: \"usd\"\n  }\n)\n\nputs(response.success)"
           },
           {
             "lang": "bash",
             "label": "cURL",
-            "source": "curl -X POST https://api.userplex.app/capture \\\n  -H \"Authorization: Bearer $USERPLEX_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"name\": \"invoice.paid\",\n    \"user_id\": \"user_123\",\n    \"data\": {\n      \"invoice_id\": \"inv_993\",\n      \"amount\": 2000,\n      \"currency\": \"usd\"\n    }\n  }'"
+            "source": "curl -X POST https://api.seerstack.app/capture \\\n  -H \"Authorization: Bearer $SEERSTACK_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"name\": \"invoice.paid\",\n    \"user_id\": \"user_123\",\n    \"data\": {\n      \"invoice_id\": \"inv_993\",\n      \"amount\": 2000,\n      \"currency\": \"usd\"\n    }\n  }'"
           }
         ],
         "requestBody": {
@@ -122,17 +122,17 @@
           {
             "lang": "typescript",
             "label": "TypeScript SDK",
-            "source": "import Userplex from 'userplex';\n\nconst client = new Userplex({\n  apiKey: process.env['USERPLEX_API_KEY'],\n});\n\nconst response = await client.users.identify({\n  user_id: 'user_123',\n  email: 'grace@hopper.com',\n  name: 'Grace Hopper',\n  attributes: {\n    plan: 'enterprise',\n    team_size: 15,\n    is_admin: true\n  }\n});\n\nconsole.log(response.success);"
+            "source": "import SeerStack from 'seerstack';\n\nconst client = new SeerStack({\n  apiKey: process.env['SEERSTACK_API_KEY'],\n});\n\nconst response = await client.users.identify({\n  user_id: 'user_123',\n  email: 'grace@hopper.com',\n  name: 'Grace Hopper',\n  attributes: {\n    plan: 'enterprise',\n    team_size: 15,\n    is_admin: true\n  }\n});\n\nconsole.log(response.success);"
           },
           {
             "lang": "ruby",
             "label": "Ruby SDK",
-            "source": "require \"userplex\"\n\nuserplex = Userplex::Client.new(\n  api_key: ENV[\"USERPLEX_API_KEY\"]\n)\n\nresponse = userplex.users.identify(\n  user_id: \"user_123\",\n  email: \"grace@hopper.com\",\n  name: \"Grace Hopper\",\n  attributes: {\n    plan: \"enterprise\",\n    team_size: 15,\n    is_admin: true\n  }\n)\n\nputs(response.success)"
+            "source": "require \"seerstack\"\n\nseerstack = SeerStack::Client.new(\n  api_key: ENV[\"SEERSTACK_API_KEY\"]\n)\n\nresponse = seerstack.users.identify(\n  user_id: \"user_123\",\n  email: \"grace@hopper.com\",\n  name: \"Grace Hopper\",\n  attributes: {\n    plan: \"enterprise\",\n    team_size: 15,\n    is_admin: true\n  }\n)\n\nputs(response.success)"
           },
           {
             "lang": "bash",
             "label": "cURL",
-            "source": "curl -X POST https://api.userplex.app/identify \\\n  -H \"Authorization: Bearer $USERPLEX_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"user_id\": \"user_123\",\n    \"email\": \"grace@hopper.com\",\n    \"name\": \"Grace Hopper\",\n    \"attributes\": {\n      \"plan\": \"enterprise\",\n      \"team_size\": 15,\n      \"is_admin\": true\n    }\n  }'"
+            "source": "curl -X POST https://api.seerstack.app/identify \\\n  -H \"Authorization: Bearer $SEERSTACK_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"user_id\": \"user_123\",\n    \"email\": \"grace@hopper.com\",\n    \"name\": \"Grace Hopper\",\n    \"attributes\": {\n      \"plan\": \"enterprise\",\n      \"team_size\": 15,\n      \"is_admin\": true\n    }\n  }'"
           }
         ],
         "requestBody": {
@@ -291,7 +291,7 @@
       "bearerAuth": {
         "type": "http",
         "scheme": "bearer",
-        "description": "Use your Userplex API key as a Bearer token. You can find your API key in the Userplex Dashboard under Settings > Developer."
+        "description": "Use your SeerStack API key as a Bearer token. You can find your API key in the SeerStack Dashboard under Settings > Developer."
       }
     }
   },
