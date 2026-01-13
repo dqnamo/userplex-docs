@@ -3,7 +3,7 @@ title: Identities
 description: Manage user profiles and attributes.
 ---
 
-Identities allow you to attach permanent traits to a `user_id`. When you send logs with that `user_id`, SeerStack automatically associates the log with these traits.
+Identities allow you to attach permanent traits to a `user_id`. When you send events with that `user_id`, SeerStack automatically associates the event with these traits.
 
 ## Identifying Users
 
@@ -87,7 +87,7 @@ Call `users.identify` when a user signs up or updates their profile. You only ne
 Once a user is identified, you can use their attributes in your dashboard filters.
 
 <Note>
-If you filter by `attributes.plan = 'enterprise'`, SeerStack will find all logs triggered by users with that plan, even if the log payload itself didn't contain the plan name.
+If you filter by `attributes.plan = 'enterprise'`, SeerStack will find all events triggered by users with that plan, even if the event payload itself didn't contain the plan name.
 </Note>
 
 ## Updating User Attributes
@@ -136,7 +136,7 @@ You can call `identify` multiple times. Each call merges new attributes with exi
     Use your database's primary key (e.g., UUID) as the `user_id`, not an email address or username which might change.
   </Card>
   <Card title="Identify Early" icon="clock">
-    Call `identify` as soon as your user logs in to ensure subsequent logs are correctly attributed.
+    Call `identify` as soon as your user logs in to ensure subsequent events are correctly attributed.
   </Card>
   <Card title="Keep Attributes Clean" icon="broom">
     Use consistent naming for attributes across your codebase. Prefer `snake_case` for attribute keys.
