@@ -81,6 +81,12 @@ Use the `events.capture` method to record an event.
 
 We recommend using a `noun.verb` syntax for your event names. This keeps your data organized and easy to search.
 
+<Note>
+  Event names starting with `$` are reserved for SeerStack system events like
+  `$pageview`, `$click`, and `$rageclick`. Avoid using `$` prefixes for your own
+  custom events.
+</Note>
+
 <CardGroup cols={2}>
   <Card title="Good" icon="check" color="#16A34A">
     * `project.created`

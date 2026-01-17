@@ -1,0 +1,135 @@
+---
+title: Web Analytics
+description: Auto-track pageviews, clicks, and rageclicks from your website.
+---
+
+SeerStack provides a lightweight browser snippet that automatically tracks pageviews, clicks, and rageclicks. Use this for product analytics and UX insights without instrumenting every button.
+
+## Install the snippet
+
+Add the script tag to your site and include your **Publishable Key**.
+
+```html
+<script
+  src="https://app.seerstack.com/web-analytics.js"
+  data-key="pk_live_..."
+></script>
+```
+
+If you want to use a custom API host (self-hosted or staging), add `data-host`:
+
+```html
+<script
+  src="https://app.seerstack.com/web-analytics.js"
+  data-key="pk_live_..."
+  data-host="https://api.seerstack.com"
+></script>
+```
+
+## Auto-tracked events
+
+| Event | When it fires | Description |
+| :--- | :--- | :--- |
+| `$pageview` | On page load (and when you manually call `pageview`) | Captures page navigation context. |
+| `$click` | On every click | Captures element metadata for UX analysis. |
+| `$rageclick` | 3+ clicks on the same element within 1s | Signals user frustration or broken UI. |
+
+## Auto-captured properties
+
+These properties are attached to every event:
+
+| Property | Description |
+| :--- | :--- |
+| `$url` | Full page URL |
+| `$path` | URL path |
+| `$referrer` | Referrer URL |
+| `$title` | Page title |
+| `$screen_width` | Screen width |
+| `$screen_height` | Screen height |
+| `$viewport_width` | Browser viewport width |
+| `$viewport_height` | Browser viewport height |
+| `$language` | Browser language |
+| `$user_agent` | Browser user agent |
+| `$platform` | Browser platform |
+| `$device_type` | Device category (`mobile`, `tablet`, `desktop`) |
+| `$os` | Operating system (`ios`, `android`, `windows`, `macos`, `linux`) |
+| `$device_vendor` | Device vendor (best-effort) |
+| `$country` | Country (server-enriched) |
+| `$region` | Region (server-enriched) |
+| `$city` | City (server-enriched) |
+
+Click events also include:
+
+| Property | Description |
+| :--- | :--- |
+| `$element_tag` | Element tag name |
+| `$element_id` | Element id |
+| `$element_classes` | Element class list |
+| `$element_text` | Element text (trimmed) |
+| `$element_href` | Link href (if any) |
+| `$element_type` | Input type (if any) |
+| `$element_name` | Input name (if any) |
+| `$element_role` | ARIA role (if any) |
+
+## Next.js (App Router)
+
+Add the script once in your root layout:
+
+```tsx
+import Script from "next/script";
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>
+        <Script
+          src="https://app.seerstack.com/web-analytics.js"
+          data-key={process.env.NEXT_PUBLIC_SEERSTACK_KEY}
+          strategy="afterInteractive"
+        />
+        {children}
+      </body>
+    </html>
+  );
+}
+```
+
+For client-side route changes, call `pageview()` when the pathname updates:
+
+```tsx
+"use client";
+
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+
+export function SeerstackPageview() {
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (window.seerstack && typeof window.seerstack.pageview === "function") {
+      window.seerstack.pageview();
+    }
+  }, [pathname]);
+
+  return null;
+}
+```
+
+Render `<SeerstackPageview />` in your layout or top-level client component.
+
+## Manual tracking
+
+You can also send your own events from the browser:
+
+```html
+<script>
+  window.seerstack.capture("signup.completed", { plan: "pro" }, "user_123");
+</script>
+```
+
+## Reserved event names
+
+<Note>
+  Event names starting with `$` are reserved for SeerStack system events.
+  Avoid using `$` prefixes for custom events.
+</Note>

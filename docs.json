@@ -25,12 +25,16 @@
     "groups": [
       {
         "group": "Getting Started",
-        "pages": ["index", "quickstart"]
+        "pages": [
+          "index",
+          "quickstart"
+        ]
       },
       {
         "group": "Essentials",
         "pages": [
           "essentials/events",
+          "essentials/web-analytics",
           "essentials/identities",
           "essentials/visualization",
           "essentials/datasources"
@@ -38,7 +42,9 @@
       },
       {
         "group": "API Reference",
-        "pages": ["api-reference/introduction"]
+        "pages": [
+          "api-reference/introduction"
+        ]
       },
       {
         "group": "Endpoints",
