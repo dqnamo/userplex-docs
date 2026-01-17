@@ -94,28 +94,7 @@ export default function RootLayout({ children }) {
 }
 ```
 
-For client-side route changes, call `pageview()` when the pathname updates:
-
-```tsx
-"use client";
-
-import { useEffect } from "react";
-import { usePathname } from "next/navigation";
-
-export function SeerstackPageview() {
-  const pathname = usePathname();
-
-  useEffect(() => {
-    if (window.seerstack && typeof window.seerstack.pageview === "function") {
-      window.seerstack.pageview();
-    }
-  }, [pathname]);
-
-  return null;
-}
-```
-
-Render `<SeerstackPageview />` in your layout or top-level client component.
+The snippet automatically tracks client-side route changes for SPA frameworks like Next.js.
 
 ## Manual tracking
 
