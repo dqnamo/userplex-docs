@@ -106,6 +106,18 @@ You can also send your own events from the browser:
 </script>
 ```
 
+## User identification
+
+The snippet stores a browser-scoped `user_id` in `localStorage` so you can link
+events across sessions. If you already know the user id, call `identify()` to
+persist it and attach it to all future events:
+
+```html
+<script>
+  window.seerstack.identify("user_123");
+</script>
+```
+
 ## Reserved event names
 
 <Note>
